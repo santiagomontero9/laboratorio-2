@@ -7,27 +7,27 @@ $nivel_random = 0;
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $frase = $_POST["frase"];
-    $texto_procesado = mb_strtolower($frase); // antes era frase_minuscula
+    $texto_procesado = mb_strtolower($frase); 
 
-    // 3.2.1 Cantidad de palabras
+
     $nivel_cringe = str_word_count($frase);
 
-    // 3.2.2 éxito
+   
     if (str_contains($texto_procesado, "éxito")) {
         $nivel_cursi += 15;
     }
 
-    // 3.2.3 meta
+    
     if (str_contains($texto_procesado, "meta")) {
         $nivel_cursi += 15;
     }
 
-    // 3.2.4 sueños
+   
     if (str_contains($texto_procesado, "sueños")) {
         $nivel_cursi += 15;
     }
 
-    // 3.2.5 número aleatorio
+    
     $nivel_random += random_int(0, 20);
 }
 ?>
@@ -103,9 +103,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <?php if ($_SERVER["REQUEST_METHOD"] === "POST"): ?>
         <div class="salida">
             <p><strong>Frase:</strong> <?php echo htmlspecialchars($frase); ?></p>
-            <p>😬 Nivel Cringe: <?php echo $nivel_cringe; ?></p>
-            <p>💖 Nivel Cursi: <?php echo $nivel_cursi; ?></p>
-            <p>🎲 Nivel Random: <?php echo $nivel_random; ?></p>
+            <p> Nivel Cringe: <?php echo $nivel_cringe; ?></p>
+            <p> Nivel Cursi: <?php echo $nivel_cursi; ?></p>
+            <p> Nivel Random: <?php echo $nivel_random; ?></p>
         </div>
     <?php endif; ?>
 </div>
