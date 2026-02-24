@@ -1,47 +1,114 @@
 <?php
+$frase = "";
+$nivel_cringe = 0;
+$nivel_cursi = 0;
+$nivel_random = 0;
 
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-$frase = "El éxito llega cuando luchas por tus sueños y alcanzas tu meta";
-$nivelCringe = 0;
-$nivelCursi = 0;
-$nivelRandom = 0;
+    $frase = $_POST["frase"];
+    $texto_procesado = mb_strtolower($frase); // antes era frase_minuscula
 
+    // 3.2.1 Cantidad de palabras
+    $nivel_cringe = str_word_count($frase);
 
-$palabras = str_word_count($frase);
-$nivelCringe += $palabras;
-$nivelCursi += $palabras;
-$nivelRandom += $palabras;
+    // 3.2.2 éxito
+    if (str_contains($texto_procesado, "éxito")) {
+        $nivel_cursi += 15;
+    }
 
+    // 3.2.3 meta
+    if (str_contains($texto_procesado, "meta")) {
+        $nivel_cursi += 15;
+    }
 
-if (str_contains($frase, "éxito")) {
-    $nivelCringe += 15;
-    $nivelCursi += 15;
-    $nivelRandom += 15;
+    // 3.2.4 sueños
+    if (str_contains($texto_procesado, "sueños")) {
+        $nivel_cursi += 15;
+    }
+
+    // 3.2.5 número aleatorio
+    $nivel_random += random_int(0, 20);
 }
-
-
-if (str_contains($frase, "meta")) {
-    $nivelCringe += 15;
-    $nivelCursi += 15;
-    $nivelRandom += 15;
-}
-
-
-if (str_contains($frase, "sueños")) {
-    $nivelCringe += 15;
-    $nivelCursi += 15;
-    $nivelRandom += 15;
-}
-
-
-$nivelCringe += random_int(0, 20);
-$nivelCursi += random_int(0, 20);
-$nivelRandom += random_int(0, 20);
-
-
-echo "Frase: " . $frase . "<br><br>";
-echo "Nivel Cringe: " . $nivelCringe . "<br>";
-echo "Nivel Cursi: " . $nivelCursi . "<br>";
-echo "Nivel Random: " . $nivelRandom;
-
 ?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Analizador Motivacional</title>
+    <style>
+        body{
+            margin:0;
+            font-family:Verdana, Geneva, Tahoma, sans-serif;
+            background:#0f172a;
+            color:white;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            min-height:100vh;
+        }
+
+        .contenedor{
+            background:#1e293b;
+            padding:30px;
+            width:480px;
+            border-radius:5px;
+            border:2px solid #38bdf8;
+        }
+
+        h2{
+            text-align:center;
+            margin-bottom:20px;
+            color:#38bdf8;
+        }
+
+        textarea{
+            width:100%;
+            padding:12px;
+            background:#0f172a;
+            color:white;
+            border:1px solid #38bdf8;
+            resize:none;
+        }
+
+        button{
+            margin-top:12px;
+            width:100%;
+            padding:10px;
+            background:#38bdf8;
+            border:none;
+            color:black;
+            font-weight:bold;
+            cursor:pointer;
+        }
+
+        .salida{
+            margin-top:20px;
+            padding:15px;
+            background:#0f172a;
+            border:1px solid #38bdf8;
+        }
+    </style>
+</head>
+<body>
+
+<div class="contenedor">
+    <h2>Calificador de Frases</h2>
+
+    <form method="POST">
+        <textarea name="frase" rows="4" required placeholder="Escribe una frase motivacional..."><?php echo htmlspecialchars($frase); ?></textarea>
+        <button type="submit">Evaluar</button>
+    </form>
+
+    <?php if ($_SERVER["REQUEST_METHOD"] === "POST"): ?>
+        <div class="salida">
+            <p><strong>Frase:</strong> <?php echo htmlspecialchars($frase); ?></p>
+            <p>😬 Nivel Cringe: <?php echo $nivel_cringe; ?></p>
+            <p>💖 Nivel Cursi: <?php echo $nivel_cursi; ?></p>
+            <p>🎲 Nivel Random: <?php echo $nivel_random; ?></p>
+        </div>
+    <?php endif; ?>
+</div>
+
+</body>
+</html>
